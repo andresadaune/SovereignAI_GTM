@@ -393,9 +393,10 @@
         }
 
         .headshot-img {
-            width: 80px;
-            height: 80px;
+            width: 96px;
+            height: 96px;
             object-fit: cover;
+            object-position: center 28%;
             border-radius: 0;
             border: 1px solid #2a2a2a;
             filter: grayscale(20%) contrast(1.1);
@@ -497,7 +498,7 @@
                 <div class="section-number" style="top: 0; right: 0; font-size: 15rem; opacity: 0.04;">00</div>
 
                 <div class="mb-12 reveal-up">
-                    <img src="assets/sap-logo.png?v=2" alt="SAP" style="height: 120px; width: auto; object-fit: contain; opacity: 0.95;">
+                    <img src="./sap-logo.png" alt="SAP" style="height: 120px; width: auto; object-fit: contain; opacity: 0.95;">
                 </div>
 
                 <div class="min-h-[60vh] flex flex-col justify-center">
@@ -516,7 +517,7 @@
 
                         <!-- Right: Headshot + Andre Sadaune -->
                         <div class="hidden md:flex flex-col items-start flex-shrink-0 title-glitch" style="animation-delay: 0.5s;">
-                            <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" style="width: 280px; height: auto; aspect-ratio: 3398/4969; object-fit: cover; border: 1px solid #2a2a2a; filter: grayscale(20%) contrast(1.1);">
+                            <img src="./headshot.jpeg" alt="Andre Sadaune" style="width: min(34vw, 420px); height: min(58vh, 560px); object-fit: cover; object-position: center 28%; border: 1px solid #2a2a2a; filter: grayscale(20%) contrast(1.1);">
                             <div class="flex items-center gap-4 mt-5">
                                 <div class="h-px w-12 bg-zinc-800"></div>
                                 <span class="text-xs text-zinc-600 uppercase tracking-widest">Andre Sadaune</span>
@@ -994,7 +995,7 @@
                     </div>
 
                     <div class="mt-16 flex items-center gap-5 reveal-up stagger-5">
-                        <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" class="headshot-img" style="width: 80px; height: 80px;">
+                        <img src="./headshot.jpeg" alt="Andre Sadaune" class="headshot-img">
                         <div>
                             <span class="text-xs text-zinc-500 uppercase tracking-widest block">Andre Sadaune</span>
                             <span class="text-[10px] text-zinc-700 uppercase tracking-wider">Sovereign AI GTM</span>
