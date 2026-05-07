@@ -502,28 +502,29 @@
 
                 <div class="min-h-[60vh] flex flex-col justify-center">
                     <div class="flex items-start gap-8 md:gap-12">
-                        <!-- Left: Title -->
-                        <h1 class="flex-1 font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight title-glitch" style="animation-delay: 0.3s;">
-                            <span class="block text-white">Sovereign</span>
-                            <span class="block text-zinc-600">AI GTM</span>
-                        </h1>
+                        <!-- Left: Title + subtitle -->
+                        <div class="flex-1">
+                            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight mb-8 title-glitch" style="animation-delay: 0.3s;">
+                                <span class="block text-white">Sovereign</span>
+                                <span class="block text-zinc-600">AI GTM</span>
+                            </h1>
 
-                        <!-- Right: Headshot + subtitle + name -->
-                        <div class="hidden md:flex flex-col items-start" style="max-width: 320px;">
-                            <div class="title-glitch" style="animation-delay: 0.5s;">
-                                <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" style="width: 280px; height: auto; aspect-ratio: 3398/4969; object-fit: cover; border: 1px solid #2a2a2a; filter: grayscale(20%) contrast(1.1);">
-                            </div>
-                            <p class="text-base text-zinc-400 leading-relaxed mt-6 font-light reveal-up stagger-3" style="max-width: 280px;">
+                            <p class="text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed font-light reveal-up stagger-3">
                                 A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
                             </p>
-                            <div class="flex items-center gap-4 mt-4 reveal-up stagger-4">
+                        </div>
+
+                        <!-- Right: Headshot + Andre Sadaune -->
+                        <div class="hidden md:flex flex-col items-start flex-shrink-0 title-glitch" style="animation-delay: 0.5s;">
+                            <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" style="width: 280px; height: auto; aspect-ratio: 3398/4969; object-fit: cover; border: 1px solid #2a2a2a; filter: grayscale(20%) contrast(1.1);">
+                            <div class="flex items-center gap-4 mt-5">
                                 <div class="h-px w-12 bg-zinc-800"></div>
                                 <span class="text-xs text-zinc-600 uppercase tracking-widest">Andre Sadaune</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mobile fallback: subtitle under title -->
+                    <!-- Mobile fallback -->
                     <div class="md:hidden mt-8">
                         <p class="text-lg text-zinc-400 max-w-2xl leading-relaxed mb-8 font-light">
                             A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
