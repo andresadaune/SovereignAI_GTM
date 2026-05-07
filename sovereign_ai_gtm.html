@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign AI GTM — Strategic Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --bronze: #c9a227; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            html { scroll-snap-type: none; }
+            .slide { padding: 5rem 1rem; }
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.15;
+            mix-blend-mode: normal;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .bg-warm { background-color: #0c0b0a; }
+        .bg-cool { background-color: #0d0d0d; }
+        .bg-deep { background-color: #080808; }
+        .bg-rich { background-color: #0f0d0c; }
+        .bg-black { background-color: #000000; }
+
+        .text-bronze { color: #c9a227; }
+        .bg-bronze { background-color: #c9a227; }
+        .border-bronze { border-color: #c9a227; }
+
+        .font-serif { font-family: 'Crimson Pro', serif; }
+
+        .slide-navigator {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 320px;
+            z-index: 50;
+        }
+
+        .connector-line {
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, #2a2927, #2a2927);
+            z-index: -1;
+        }
+
+        .connector-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #c9a227;
+            transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 20px rgba(201,162,39,0.3);
+        }
+
+        .slide-number {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            line-height: 1;
+            color: #3f3f42;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .slide-number:hover { color: #c9a227; }
+
+        .slide-number.active {
+            color: #fafafa;
+            transform: translateX(10px);
+        }
+
+        .slide-number.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 1px;
+            background: #c9a227;
+            box-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
+        }
+
+        .slide-number.passed { color: #5c5854; }
+
+        @media (max-width: 768px) {
+            .slide-navigator { display: none; }
+        }
+
+        .bento-card {
+            position: relative;
+            background: #131313;
+            border: 1px solid #2a2a2a;
+            border-radius: 0;
+            overflow: hidden;
+            transition: border-color 0.4s ease, background-color 0.4s ease;
+        }
+
+        .bento-card:hover {
+            border-color: #404040;
+            background: #1a1a1a;
+        }
+
+        .bento-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+
+        .bento-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-number {
+            position: absolute;
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(6rem, 12vw, 10rem);
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            top: 1rem;
+            right: 1rem;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+
+        /* Gentle pipeline shimmer */
+        .pipeline-container {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #1a1a1a, #2a2a2a, #1a1a1a);
+            border: 1px solid #2a2a2a;
+        }
+
+        .pipeline-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(201,162,39,0.04) 40%, rgba(201,162,39,0.07) 50%, rgba(201,162,39,0.04) 60%, transparent 100%);
+            background-size: 300% 100%;
+            animation: gentleShimmer 16s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes gentleShimmer {
+            0% { background-position: 150% 0; }
+            50% { background-position: -150% 0; }
+            100% { background-position: 150% 0; }
+        }
+
+        .phase-card {
+            border: 1px solid #2a2927;
+            background: #0c0b0a;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .phase-card:hover {
+            border-color: #3f3b36;
+            background: #0f0e0d;
+        }
+
+        .phase-number {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            color: rgba(201, 162, 39, 0.15);
+            line-height: 1;
+        }
+
+        .speaker-note {
+            border-left: 2px solid #c9a227;
+            background: rgba(201, 162, 39, 0.03);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .speaker-note::before {
+            content: '';
+            position: absolute;
+            top: 0.5rem;
+            left: 1rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            color: rgba(201, 162, 39, 0.2);
+            line-height: 1;
+        }
+
+        .threat-card {
+            border: 1px solid #2a2927;
+            background: #0c0b0a;
+            transition: all 0.4s ease;
+        }
+
+        .threat-card:hover {
+            border-color: #5c3a3a;
+            background: #140f0f;
+        }
+
+        .opportunity-card {
+            border: 1px solid #2a2927;
+            background: #0c0b0a;
+            transition: all 0.4s ease;
+        }
+
+        .opportunity-card:hover {
+            border-color: #3f3b30;
+            background: #141312;
+        }
+
+        .closing-line {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.5rem, 3.5vw, 3rem);
+            line-height: 1.2;
+            color: #e5e5e5;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .closing-line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--bronze), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { transform: scaleY(0); opacity: 0; transform-origin: top; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .title-glitch {
+            position: relative;
+            animation: gentleReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes gentleReveal {
+            0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .label-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #6b6864;
+            font-weight: 500;
+        }
+
+        .progress-pill {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(12, 11, 10, 0.9);
+            border: 1px solid #2a2927;
+            padding: 0.5rem 1.25rem;
+            z-index: 40;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .progress-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #3f3f42;
+            transition: all 0.3s ease;
+        }
+
+        .progress-pill .dot.active {
+            background: #c9a227;
+            box-shadow: 0 0 8px rgba(201,162,39,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .progress-pill { display: none; }
+        }
+
+        .headshot-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0;
+            border: 1px solid #2a2a2a;
+            filter: grayscale(20%) contrast(1.1);
+        }
+
+        .closing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .closing-statement {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+            line-height: 1.35;
+            color: #e5e5e5;
+            margin-bottom: 3rem;
+        }
+
+        .why-andre-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .why-andre-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #b0aba5;
+        }
+
+        .why-andre-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 6px;
+            height: 6px;
+            background: #c9a227;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(201,162,39,0.3);
+        }
+
+        .why-andre-list li strong {
+            color: #e5e5e5;
+            font-weight: 500;
+        }
+
+        .closing-summary {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            line-height: 1.5;
+            color: #9f9a94;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #2a2927;
+            max-width: 800px;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="antialiased selection:bg-zinc-800 selection:text-white">
+
+    <div class="noise-overlay"></div>
+
+    <!-- Left Navigator -->
+    <div class="slide-navigator">
+        <div class="connector-line"><div class="connector-progress" id="slideProgress"></div></div>
+        <div class="slide-number active" data-slide="0" onclick="scrollToSlide(0)" tabindex="0">00</div>
+        <div class="slide-number" data-slide="1" onclick="scrollToSlide(1)" tabindex="0">01</div>
+        <div class="slide-number" data-slide="2" onclick="scrollToSlide(2)" tabindex="0">02</div>
+        <div class="slide-number" data-slide="3" onclick="scrollToSlide(3)" tabindex="0">03</div>
+        <div class="slide-number" data-slide="4" onclick="scrollToSlide(4)" tabindex="0">04</div>
+        <div class="slide-number" data-slide="5" onclick="scrollToSlide(5)" tabindex="0">05</div>
+        <div class="slide-number" data-slide="6" onclick="scrollToSlide(6)" tabindex="0">06</div>
+    </div>
+
+    <!-- Bottom Progress Pill -->
+    <div class="progress-pill">
+        <div class="dot active" data-slide="0"></div>
+        <div class="dot" data-slide="1"></div>
+        <div class="dot" data-slide="2"></div>
+        <div class="dot" data-slide="3"></div>
+        <div class="dot" data-slide="4"></div>
+        <div class="dot" data-slide="5"></div>
+        <div class="dot" data-slide="6"></div>
+        <span class="text-[10px] uppercase tracking-wider text-[#6b6864] ml-2" id="slideLabel">Intro</span>
+    </div>
+
+    <main>
+        <!-- SLIDE 0: Title -->
+        <section class="slide bg-black" id="slide-0">
+            <div class="max-w-[1100px] mx-auto w-full relative z-10">
+                <div class="section-number" style="top: 0; right: 0; font-size: 15rem; opacity: 0.04;">00</div>
+
+                <div class="flex items-start justify-between mb-12 reveal-up">
+                    <svg width="72" height="36" viewBox="0 0 72 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="36" rx="4" fill="url(#sapGrad)"/>
+                        <defs>
+                            <linearGradient id="sapGrad" x1="0" y1="0" x2="72" y2="36" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#00B8F1"/>
+                                <stop offset="0.5" stop-color="#008FD3"/>
+                                <stop offset="1" stop-color="#0070AC"/>
+                            </linearGradient>
+                        </defs>
+                        <text x="36" y="24" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="17" letter-spacing="1.5">SAP</text>
+                    </svg>
+                    <img src="headshot.jpg" alt="André Sadaune" class="headshot-img">
+                </div>
+
+                <div class="min-h-[60vh] flex flex-col justify-center">
+                    <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight mb-8 title-glitch" style="animation-delay: 0.3s;">
+                        <span class="block text-white">Sovereign</span>
+                        <span class="block text-zinc-600">AI GTM</span>
+                    </h1>
+
+                    <p class="text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed mb-12 font-light reveal-up stagger-3">
+                        A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
+                    </p>
+
+                    <div class="flex items-center gap-6 reveal-up stagger-4">
+                        <div class="h-px w-16 bg-zinc-800"></div>
+                        <span class="text-xs text-zinc-600 uppercase tracking-widest">André Sadaune</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-hint">
+                <span style="font-size: 0.6rem; letter-spacing: 0.2em; opacity: 0.5; color: #6b6864;">SCROLL</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: Strategic Inflection Point -->
+        <section class="slide bg-warm border-t border-[#2a2927]" id="slide-1">
+            <div class="max-w-[1200px] mx-auto w-full relative z-10">
+                <div class="section-number">01</div>
+
+                <span class="label-tag block mb-6 reveal-up">The Strategic Inflection Point</span>
+
+                <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-[#fafafa] max-w-4xl mb-12 reveal-up stagger-1">
+                    Sovereign AI will become a board-level priority. The next AI battleground is control over enterprise know-how.
+                </h2>
+
+                <!-- Pipeline -->
+                <div class="pipeline-container p-6 md:p-8 mb-12 relative overflow-hidden reveal-up stagger-2">
+                    <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="text-center md:text-left">
+                            <div class="text-2xl md:text-3xl font-serif text-zinc-300 mb-1">AI Bots/Assistants</div>
+                            <div class="text-[10px] uppercase tracking-wider text-zinc-600">Productivity</div>
+                        </div>
+                        <div class="hidden md:block text-zinc-700 text-2xl">→</div>
+                        <div class="text-center">
+                            <div class="text-2xl md:text-3xl font-serif text-bronze mb-1">Agents</div>
+                            <div class="text-[10px] uppercase tracking-wider text-zinc-600">Execution</div>
+                        </div>
+                        <div class="hidden md:block text-zinc-700 text-2xl">→</div>
+                        <div class="text-center md:text-right">
+                            <div class="text-2xl md:text-3xl font-serif text-white mb-1">Autonomous Processes</div>
+                            <div class="text-[10px] uppercase tracking-wider text-zinc-600">Enterprise Core</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-12">
+                    <div class="bento-card p-6 md:p-8 reveal-up stagger-3">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-bronze mb-4">What Enterprises Expose</div>
+                            <ul class="space-y-3 text-sm text-[#9f9a94]">
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Process know-how</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Industry-specific logic</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Customer & supplier intelligence</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Decision patterns</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Operational constraints & compliance rules</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Competitive differentiation</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">—</span><span>Sensitive Data (often unwanted exposure)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bento-card p-6 md:p-8 reveal-up stagger-4">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-bronze mb-4">Why Now</div>
+                            <ul class="space-y-3 text-sm text-[#9f9a94]">
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">▪</span><span>EU AI Act: governance, accountability, risk-based management</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">▪</span><span>US CLOUD Act: jurisdictional control becomes a board topic (political risk)</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">▪</span><span>Enterprises refuse to train external AI on know-how that commoditizes them</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">▪</span><span>Shadow AI: employees using ungoverned AI tools that leak proprietary data and bypass compliance</span></li>
+                                <li class="flex items-start gap-3"><span class="text-[#4a4844] mt-1">▪</span><span>Trustworthy AI: reputational, regulatory and legal risks when models misbehave in customer-facing or regulated processes</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="speaker-note reveal-up stagger-5">
+                    <p class="text-lg md:text-xl text-[#d4d0cc] leading-relaxed font-serif relative z-10 pl-4">
+                        <span class="text-bronze mr-2">→</span>I would not position Sovereign AI as a fear-based compliance topic. I would position it as a strategic control topic: how do we scale AI without losing control over the knowledge that makes the enterprise valuable?
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: SAP's Right to Win -->
+        <section class="slide bg-cool border-t border-[#1a1a1a]" id="slide-2">
+            <div class="max-w-[1200px] mx-auto w-full relative z-10">
+                <div class="section-number">02</div>
+
+                <span class="label-tag block mb-6 reveal-up">SAP's Right to Win</span>
+
+                <h2 class="font-serif text-4xl md:text-6xl leading-[0.95] text-[#fafafa] max-w-4xl mb-4 reveal-up stagger-1">
+                    SAP should not own every AI layer.
+                </h2>
+                <h3 class="font-serif text-3xl md:text-5xl leading-[0.95] text-bronze mb-12 reveal-up stagger-2">
+                    SAP should orchestrate trusted enterprise AI.
+                </h3>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="bento-card p-6 md:p-8 reveal-up stagger-2">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-4">Current Positioning</div>
+                            <p class="text-sm text-[#9f9a94] leading-relaxed mb-4">
+                                SAP frames EU AI Cloud as a sovereign framework giving customers choice across SAP data centers, trusted European infrastructure, and fully managed on-site deployments.
+                            </p>
+                            <p class="text-sm text-[#9f9a94] leading-relaxed">
+                                Governed access to auditable LLMs from SAP and trusted partners, aligned to EU AI Act, GDPR, and European sovereignty needs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bento-card p-6 md:p-8 reveal-up stagger-3">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-4">Realistic Operating Model</div>
+                            <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>SAP Sovereign Cloud + Delos Cloud</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Microsoft Azure where appropriate</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>StackIT, OVHcloud, local providers</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Mistral, OpenAI, Cohere via BTP</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Business Data Cloud + Joule + Agents</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>SAP Business Suite & industry processes</span></li>
+                                <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Private cloud / On Premise</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bento-card p-6 md:p-8 reveal-up stagger-4">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-bronze mb-4">Proof Point</div>
+                            <ul class="space-y-4 text-sm text-[#9f9a94]">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-bronze mt-1">▸</span>
+                                    <div>
+                                        <div class="text-white font-medium mb-1">OpenAI for Germany</div>
+                                        <div>SAP and OpenAI announced a sovereign AI partnership for Germany's public sector, supported by Delos Cloud and running on Microsoft Azure technology.</div>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-bronze mt-1">▸</span>
+                                    <div>
+                                        <div class="text-white font-medium mb-1">SAP-RPT-1</div>
+                                        <div>SAP's own reasoning model initiative for enterprise-grade, auditable AI inference.</div>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-bronze mt-1">▸</span>
+                                    <div>
+                                        <div class="text-white font-medium mb-1">Mistral Partnership</div>
+                                        <div>European LLM leader integrated via SAP BTP for governed, local inference.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="speaker-note reveal-up stagger-5">
+                    <p class="text-lg md:text-xl text-[#d4d0cc] leading-relaxed font-serif relative z-10 pl-4">
+                        <span class="text-bronze mr-2">→</span>We don't win with a sovereign single-vendor story. SAP wins by orchestrating the trusted operating model around enterprise grade AI — the right direction and the only feasible one vs Neoclouds and Hyperscalers.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Strategic Architecture -->
+        <section class="slide bg-warm border-t border-[#2a2927]" id="slide-3">
+            <div class="max-w-[1200px] mx-auto w-full relative z-10">
+                <div class="section-number">03</div>
+
+                <span class="label-tag block mb-6 reveal-up">The Strategic Architecture</span>
+
+                <h2 class="font-serif text-4xl md:text-6xl leading-[0.95] text-[#fafafa] max-w-4xl mb-4 reveal-up stagger-1">
+                    From Sovereign Cloud
+                </h2>
+                <h3 class="font-serif text-3xl md:text-5xl leading-[0.95] text-[#5c5854] italic mb-12 reveal-up stagger-2">
+                    to Autonomous Enterprise.
+                </h3>
+
+                <div class="grid md:grid-cols-3 gap-px bg-[#2a2927] border border-[#2a2927] mb-12 reveal-up stagger-3">
+                    <div class="bg-[#0c0b0a] p-6 md:p-8 relative group hover:bg-[#0f0e0d] transition-colors">
+                        <div class="phase-number mb-4">01</div>
+                        <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Layer 1</div>
+                        <div class="font-serif text-2xl text-[#fafafa] mb-4">Sovereign Cloud</div>
+                        <p class="text-sm text-[#9f9a94] leading-relaxed mb-4">
+                            Data, legal, operational and technical control.
+                        </p>
+                        <div class="text-xs text-[#6b6864] space-y-1">
+                            <div>SAP Sovereign Cloud</div>
+                            <div>Delos Cloud</div>
+                            <div>On-site & trusted infrastructure</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0c0b0a] p-6 md:p-8 relative group hover:bg-[#0f0e0d] transition-colors border-l border-r border-[#2a2927]">
+                        <div class="phase-number mb-4 text-bronze" style="color: rgba(201,162,39,0.25);">02</div>
+                        <div class="text-[10px] uppercase tracking-wider text-bronze mb-2">Layer 2</div>
+                        <div class="font-serif text-2xl text-[#fafafa] mb-4">EU AI Cloud / Sovereign AI</div>
+                        <p class="text-sm text-[#9f9a94] leading-relaxed mb-4">
+                            AI models, inference, fine-tuning and applications under sovereign constraints.
+                        </p>
+                        <div class="text-xs text-[#6b6864] space-y-1">
+                            <div>SAP BTP + AI Core</div>
+                            <div>Generative AI Hub</div>
+                            <div>Trusted partner / open-source models</div>
+                        </div>
+                        <div class="absolute top-0 left-0 w-full h-1 bg-bronze opacity-50"></div>
+                    </div>
+
+                    <div class="bg-[#0c0b0a] p-6 md:p-8 relative group hover:bg-[#0f0e0d] transition-colors">
+                        <div class="phase-number mb-4">03</div>
+                        <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Layer 3</div>
+                        <div class="font-serif text-2xl text-[#fafafa] mb-4">Business AI / Autonomous Enterprise</div>
+                        <p class="text-sm text-[#9f9a94] leading-relaxed mb-4">
+                            AI creates value inside real business processes.
+                        </p>
+                        <div class="text-xs text-[#6b6864] space-y-1">
+                            <div>Joule + Agents</div>
+                            <div>Business Data Cloud</div>
+                            <div>Business Suite + Industry workflows</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bento-card p-6 reveal-up stagger-4">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-bronze mb-3">Strategic Insight</div>
+                            <p class="text-sm text-[#9f9a94] leading-relaxed">
+                                Hyperscalers fight over Layer 1. SAP's strongest position is Layer 2 + 3: Sovereign AI grounded in enterprise data, process semantics, workflows, governance and business execution.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bento-card p-6 reveal-up stagger-5">
+                        <div class="bento-content">
+                            <div class="text-[10px] uppercase tracking-wider text-bronze mb-3">The Commoditization Shift</div>
+                            <p class="text-sm text-[#9f9a94] leading-relaxed">
+                                Infra/Hosting + Intelligence/Models will be more and more commodity. Reliable/Trustworthy AI will be key: AI that understands and runs end-to-end processes within set boundaries. AI that you can control, own and understand.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="speaker-note reveal-up">
+                    <p class="text-lg md:text-xl text-[#d4d0cc] leading-relaxed font-serif relative z-10 pl-4">
+                        <span class="text-bronze mr-2">→</span>The long-term prize is not sovereign hosting. It is trusted autonomous execution. Hyperscalers can provide compute. Model providers can provide intelligence. SAP can make AI reliable inside real enterprise processes.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: GTM Plan -->
+        <section class="slide bg-cool border-t border-[#1a1a1a]" id="slide-4">
+            <div class="max-w-[1200px] mx-auto w-full relative z-10">
+                <div class="section-number">04</div>
+
+                <span class="label-tag block mb-6 reveal-up">GTM Plan</span>
+
+                <h2 class="font-serif text-4xl md:text-6xl leading-[0.95] text-[#fafafa] max-w-4xl mb-12 reveal-up stagger-1">
+                    From category definition <span class="text-[#5c5854] italic">to market ownership</span>.
+                </h2>
+
+                <div class="space-y-6 mb-12">
+                    <!-- Phase 1 -->
+                    <div class="phase-card p-6 md:p-8 reveal-up stagger-2">
+                        <div class="flex flex-col md:flex-row gap-6 md:gap-12">
+                            <div class="md:w-48 shrink-0">
+                                <div class="text-[10px] uppercase tracking-wider text-bronze mb-1">Phase 1</div>
+                                <div class="font-serif text-3xl text-white mb-1">0–3 Months</div>
+                                <div class="text-xs text-[#6b6864]">Define the category and create urgency</div>
+                            </div>
+                            <div class="flex-1 grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Key Moves</div>
+                                    <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Reframe from "compliance cloud" to "protect process intelligence"</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Shape the narrative, push it via all channels, build assets and start selected sales plays</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Build 3–4 lighthouse sales plays:<br>• Sovereign Joule for public sector<br>• Sovereign Business Data Cloud for regulated enterprises / Healthcare<br>• Sovereign Industrial AI / Private Cloud / Airgapped solutions for Defence</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Create minimum field kit: board pitch, qualification framework, FAQ, partner map</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Start clear positioning for SAP in AI Gigafactories as trusted Software AI layer for large scale public projects</span></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Personal Acceleration</div>
+                                    <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                        <li class="flex items-start gap-2"><span class="text-bronze">▪</span><span>SAP internal GTM network</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">▪</span><span>Ex-SAP Academy relationships</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">▪</span><span>Delos Cloud contact via previous boss</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">▪</span><span>Head of Solution Advisory relationship</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">▪</span><span>German public-sector ties + partner ecosystem</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="phase-card p-6 md:p-8 reveal-up stagger-3">
+                        <div class="flex flex-col md:flex-row gap-6 md:gap-12">
+                            <div class="md:w-48 shrink-0">
+                                <div class="text-[10px] uppercase tracking-wider text-bronze mb-1">Phase 2</div>
+                                <div class="font-serif text-3xl text-white mb-1">3–12 Months</div>
+                                <div class="text-xs text-[#6b6864]">Convert lighthouse demand into repeatable pipeline</div>
+                            </div>
+                            <div class="flex-1 grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Partner-Led Execution</div>
+                                    <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Delos Cloud / SAP Sovereign Cloud</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Microsoft Azure where aligned</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>European sovereign options where needed</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Mistral, OpenAI, Cohere via BTP</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Consulting and SI partners</span></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-2">Create Sovereign AI Pipeline Operating Model</div>
+                                    <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Global target accounts</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Market Unit alignment</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Strategic pursuit reviews</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Partner contribution tracking</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Incentives for sales in place</span></li>
+                                        <li class="flex items-start gap-2"><span class="text-bronze">·</span><span>Product gap feedback from market insights</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="phase-card p-6 md:p-8 reveal-up stagger-4">
+                        <div class="flex flex-col md:flex-row gap-6 md:gap-12">
+                            <div class="md:w-48 shrink-0">
+                                <div class="text-[10px] uppercase tracking-wider text-bronze mb-1">Phase 3</div>
+                                <div class="font-serif text-3xl text-white mb-1">12+ Months</div>
+                                <div class="text-xs text-[#6b6864]">Own the control layer for the Autonomous Enterprise</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-[10px] uppercase tracking-wider text-[#6b6864] mb-3">Key Moves</div>
+                                <ul class="space-y-2 text-sm text-[#9f9a94]">
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Position Sovereign AI as the control architecture for Autonomous Enterprise</span></li>
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Commercialize by workload criticality and control level, not one generic SKU</span></li>
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Build reference architectures: autonomous finance, procurement, supply chain, public administration, industrial operations</span></li>
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>Global lighthouse proof points: Europe/Germany, Middle East, APJ, North America</span></li>
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>As many AI use cases as possible under the layer of "Governed by SAP's sovereign AI offering" — incentivize and leverage the ecosystem (ISVs, GSSPs, SIs)</span></li>
+                                    <li class="flex items-start gap-2"><span class="text-[#4a4844]">→</span><span>"SAP creates the trusted ecosystem layer / Sovereign AI Factory under which customers, ISVs, GSSPs, SIs and model providers bring enterprise AI use cases to market." Turn Sovereign AI into an ecosystem trustmark</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="speaker-note reveal-up stagger-5">
+                    <p class="text-lg md:text-xl text-[#d4d0cc] leading-relaxed font-serif relative z-10 pl-4">
+                        <span class="text-bronze mr-2">→</span>In AI, 12 months is already long term. The question will shift from "Where is my AI hosted?" to "Can I let AI agents execute business-critical processes without losing control of my know-how, compliance posture or strategic autonomy?"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Opportunities & Threats -->
+        <section class="slide bg-warm border-t border-[#2a2927]" id="slide-5">
+            <div class="max-w-[1200px] mx-auto w-full relative z-10">
+                <div class="section-number">05</div>
+
+                <span class="label-tag block mb-6 reveal-up">Opportunities & Threats</span>
+
+                <h2 class="font-serif text-4xl md:text-6xl leading-[0.95] text-[#fafafa] max-w-4xl mb-12 reveal-up stagger-1">
+                    Sovereign AI for SAP: <span class="text-[#5c5854] italic">opportunity and risk</span>.
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-12">
+                    <!-- Opportunities -->
+                    <div class="space-y-4 reveal-up stagger-2">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-2 h-2 bg-bronze rounded-full shadow-[0_0_10px_rgba(201,162,39,0.5)]"></div>
+                            <div class="text-[10px] uppercase tracking-wider text-bronze">Opportunities</div>
+                        </div>
+
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">1. Sovereign AI becomes a top enterprise AI priority</div>
+                            <div class="text-xs text-[#6b6864]">As AI moves into execution, enterprises must protect process know-how, industry logic and decision patterns.</div>
+                        </div>
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">2. Elevate sovereignty from compliance to competitive advantage</div>
+                            <div class="text-xs text-[#6b6864]">The winning message: scale AI faster without losing control of what makes your enterprise valuable.</div>
+                        </div>
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">3. Differentiate above infrastructure</div>
+                            <div class="text-xs text-[#6b6864]">SAP does not need to own every model or GPU. SAP orchestrates cloud, models, data, agents and processes.</div>
+                        </div>
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">4. Regulatory pressure creates urgency</div>
+                            <div class="text-xs text-[#6b6864]">EU AI Act, GDPR, CLOUD Act concerns, national AI strategies push customers toward clearer control models.</div>
+                        </div>
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">5. Partner ecosystem creates leverage</div>
+                            <div class="text-xs text-[#6b6864]">Delos, Microsoft, European providers, model partners, SIs become repeatable sales motions.</div>
+                        </div>
+                        <div class="opportunity-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">6. Autonomous Enterprise is the long-term prize</div>
+                            <div class="text-xs text-[#6b6864]">SAP knows business data and processes best. Sovereign AI becomes the trust layer for agentic execution.</div>
+                        </div>
+                    </div>
+
+                    <!-- Threats -->
+                    <div class="space-y-4 reveal-up stagger-3">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-2 h-2 bg-[#8b4545] rounded-full shadow-[0_0_10px_rgba(139,69,69,0.4)]"></div>
+                            <div class="text-[10px] uppercase tracking-wider text-[#8b4545]">Threats</div>
+                        </div>
+
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">1. Hyperscalers define the category too narrowly</div>
+                            <div class="text-xs text-[#6b6864]">If sovereignty becomes only infrastructure, SAP loses the chance to define it as governed enterprise AI execution.</div>
+                        </div>
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">2. Enterprises underestimate strategic IP leakage</div>
+                            <div class="text-xs text-[#6b6864]">Many see AI risk as data privacy only. They may not yet understand the risk of exposing workflows and decision patterns.</div>
+                        </div>
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">3. Customer definitions are fragmented</div>
+                            <div class="text-xs text-[#6b6864]">Data residency, jurisdictional control, operational sovereignty, model sovereignty and air-gapping are often confused.</div>
+                        </div>
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">4. Product readiness must match ambition</div>
+                            <div class="text-xs text-[#6b6864]">Overpromising on air-gapping, local model control, agent governance or auditability would damage trust.</div>
+                        </div>
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">5. Partner complexity can slow execution</div>
+                            <div class="text-xs text-[#6b6864]">SAP's ecosystem is a strength only if converted into clear ownership, sales plays, incentives and pipeline governance.</div>
+                        </div>
+                        <div class="threat-card p-5">
+                            <div class="text-sm text-[#d4d0cc] font-medium mb-1">6. Public-sector cycles are slow</div>
+                            <div class="text-xs text-[#6b6864]">Public sector is strategically important, but regulated enterprise plays must run in parallel.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Closing / WHY ANDRÉ -->
+        <section class="slide bg-black border-t border-[#1a1a1a]" id="slide-6">
+            <div class="max-w-[1000px] mx-auto w-full relative z-10">
+                <div class="section-number" style="font-size: 20rem; opacity: 0.03;">06</div>
+
+                <div class="closing-container">
+                    <span class="label-tag block mb-8 reveal-up">WHY ANDRÉ</span>
+
+                    <h2 class="font-serif text-3xl md:text-5xl text-[#fafafa] mb-10 reveal-up stagger-1">
+                        I bring the exact operating mix this role needs.
+                    </h2>
+
+                    <ul class="why-andre-list reveal-up stagger-2">
+                        <li><strong>SAP-native GTM credibility:</strong> I know how SAP sales, presales, partner and field motions work from the inside.</li>
+                        <li><strong>Direct sovereign-cloud access:</strong> I can activate relationships into Delos Cloud, Solution Advisory and German public-sector circles. I also established top strategic Sovereign AI Partnerships with HPE and NVIDIA already (and this with a 35 person startup).</li>
+                        <li><strong>AI commercialization experience:</strong> I have built GTM strategies and scaled AI sales motions at DataRobot, UiPath and QuantPi, from strategic narrative to enterprise adoption.</li>
+                        <li><strong>Partner execution muscle:</strong> This role sits between alliances, sales, product and engineering, exactly the type of orchestration I have built before.</li>
+                        <li><strong>Strong point of view:</strong> SAP should not sell Sovereign AI as secure hosting. SAP should sell it as the trusted control layer for enterprise AI execution.</li>
+                    </ul>
+
+                    <div class="closing-summary reveal-up stagger-4">
+                        I can connect SAP's internal machine, Delos/public-sector access, partner channels and AI GTM experience, and turn Sovereign AI into lighthouse deals, repeatable sales plays and partner-led pipeline.
+                    </div>
+
+                    <div class="mt-16 flex items-center gap-4 reveal-up stagger-5">
+                        <img src="headshot.jpg" alt="André Sadaune" class="headshot-img" style="width: 48px; height: 48px;">
+                        <div>
+                            <span class="text-xs text-zinc-500 uppercase tracking-widest block">André Sadaune</span>
+                            <span class="text-[10px] text-zinc-700 uppercase tracking-wider">Sovereign AI GTM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Slide navigation
+        const slides = document.querySelectorAll('.slide');
+        const slideNumbers = document.querySelectorAll('.slide-number');
+        const progressDots = document.querySelectorAll('.progress-pill .dot');
+        const slideLabel = document.getElementById('slideLabel');
+        const progressBar = document.getElementById('slideProgress');
+
+        const labels = ['Intro', 'Inflection', 'Right to Win', 'Architecture', 'GTM Plan', 'Opp & Risk', 'Closing'];
+
+        function scrollToSlide(index) {
+            if (index >= 0 && index < slides.length) {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // IntersectionObserver for slide activation
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slide = entry.target;
+                    const index = Array.from(slides).indexOf(slide);
+
+                    // Update left nav
+                    slideNumbers.forEach((num, idx) => {
+                        if (idx < index) { num.classList.add('passed'); num.classList.remove('active'); }
+                        else if (idx === index) { num.classList.add('active'); num.classList.remove('passed'); }
+                        else { num.classList.remove('active', 'passed'); }
+                    });
+
+                    // Update progress bar
+                    if (progressBar) {
+                        const pct = (index / (slides.length - 1)) * 100;
+                        progressBar.style.height = pct + '%';
+                    }
+
+                    // Update bottom pill
+                    progressDots.forEach((dot, idx) => {
+                        dot.classList.toggle('active', idx === index);
+                    });
+                    if (slideLabel) slideLabel.textContent = labels[index] || '';
+
+                    // Trigger reveals within this slide
+                    slide.querySelectorAll('.reveal-up, .reveal-left').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                    slide.querySelectorAll('.closing-line').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }
+            });
+        }, { threshold: 0.4 });
+
+        slides.forEach(slide => slideObserver.observe(slide));
+
+        // Keyboard navigation
+        let currentSlide = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                currentSlide = Math.min(currentSlide + 1, slides.length - 1);
+                scrollToSlide(currentSlide);
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                currentSlide = Math.max(currentSlide - 1, 0);
+                scrollToSlide(currentSlide);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 0;
+                scrollToSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = slides.length - 1;
+                scrollToSlide(currentSlide);
+            }
+        });
+
+        // Update currentSlide on scroll
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const windowH = window.innerHeight;
+            slides.forEach((slide, idx) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= windowH * 0.5 && rect.bottom >= windowH * 0.5) {
+                    currentSlide = idx;
+                }
+            });
+        }, { passive: true });
+
+        // Bento card mouse tracking
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Slide number keyboard accessibility
+        slideNumbers.forEach(num => {
+            num.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const idx = parseInt(num.dataset.slide);
+                    scrollToSlide(idx);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
