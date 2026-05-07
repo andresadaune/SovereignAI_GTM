@@ -52,36 +52,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .sap-bg-image {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(
-                    to right,
-                    rgba(0,0,0,0.92) 0%,
-                    rgba(0,0,0,0.78) 42%,
-                    rgba(0,0,0,0.62) 100%
-                ),
-                linear-gradient(
-                    to bottom,
-                    rgba(0,0,0,0.25) 0%,
-                    rgba(0,0,0,0.9) 100%
-                ),
-                url("sap-locations-walldorf-photo-anvilwindow_XL.webp");
-            background-size: cover;
-            background-position: center;
-            opacity: 0.32;
-            filter: grayscale(100%) contrast(1.15) brightness(0.75);
-            z-index: 0;
-        }
-
-        .sap-bg-image::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 35% 45%, transparent 0%, rgba(0,0,0,0.65) 68%, rgba(0,0,0,0.95) 100%);
-        }
-
         .bg-warm { background-color: #0c0b0a; }
         .bg-cool { background-color: #0d0d0d; }
         .bg-deep { background-color: #080808; }
@@ -491,7 +461,6 @@
             max-width: 800px;
         }
     </style>
-<base target="_blank">
 </head>
 <body class="antialiased selection:bg-zinc-800 selection:text-white">
 
@@ -524,39 +493,45 @@
     <main>
         <!-- SLIDE 0: Title -->
         <section class="slide bg-black" id="slide-0">
-            <div class="sap-bg-image"></div>
-
             <div class="max-w-[1100px] mx-auto w-full relative z-10">
                 <div class="section-number" style="top: 0; right: 0; font-size: 15rem; opacity: 0.04;">00</div>
 
-                <div class="flex items-start justify-between mb-12 reveal-up">
-                    <svg width="72" height="36" viewBox="0 0 72 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="72" height="36" rx="4" fill="url(#sapGrad)"/>
-                        <defs>
-                            <linearGradient id="sapGrad" x1="0" y1="0" x2="72" y2="36" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#00B8F1"/>
-                                <stop offset="0.5" stop-color="#008FD3"/>
-                                <stop offset="1" stop-color="#0070AC"/>
-                            </linearGradient>
-                        </defs>
-                        <text x="36" y="24" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="17" letter-spacing="1.5">SAP</text>
-                    </svg>
-                    <img src="72 - connygutschalkfotografie_portrait_18.jpg" alt="André Sadaune" class="headshot-img">
+                <div class="mb-12 reveal-up">
+                    <img src="assets/sap-logo.png?v=2" alt="SAP" style="height: 120px; width: auto; object-fit: contain; opacity: 0.95;">
                 </div>
 
                 <div class="min-h-[60vh] flex flex-col justify-center">
-                    <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight mb-8 title-glitch" style="animation-delay: 0.3s;">
-                        <span class="block text-white">Sovereign</span>
-                        <span class="block text-zinc-600">AI GTM</span>
-                    </h1>
+                    <div class="flex items-start gap-8 md:gap-12">
+                        <!-- Left: Title -->
+                        <h1 class="flex-1 font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight title-glitch" style="animation-delay: 0.3s;">
+                            <span class="block text-white">Sovereign</span>
+                            <span class="block text-zinc-600">AI GTM</span>
+                        </h1>
 
-                    <p class="text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed mb-12 font-light reveal-up stagger-3">
-                        A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
-                    </p>
+                        <!-- Right: Headshot + subtitle + name -->
+                        <div class="hidden md:flex flex-col items-start" style="max-width: 320px;">
+                            <div class="title-glitch" style="animation-delay: 0.5s;">
+                                <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" style="width: 280px; height: auto; aspect-ratio: 3398/4969; object-fit: cover; border: 1px solid #2a2a2a; filter: grayscale(20%) contrast(1.1);">
+                            </div>
+                            <p class="text-base text-zinc-400 leading-relaxed mt-6 font-light reveal-up stagger-3" style="max-width: 280px;">
+                                A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
+                            </p>
+                            <div class="flex items-center gap-4 mt-4 reveal-up stagger-4">
+                                <div class="h-px w-12 bg-zinc-800"></div>
+                                <span class="text-xs text-zinc-600 uppercase tracking-widest">Andre Sadaune</span>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="flex items-center gap-6 reveal-up stagger-4">
-                        <div class="h-px w-16 bg-zinc-800"></div>
-                        <span class="text-xs text-zinc-600 uppercase tracking-widest">André Sadaune</span>
+                    <!-- Mobile fallback: subtitle under title -->
+                    <div class="md:hidden mt-8">
+                        <p class="text-lg text-zinc-400 max-w-2xl leading-relaxed mb-8 font-light">
+                            A Storyline for SAP. How to position, architect, and execute Sovereign AI as a growth category, not a compliance add-on.
+                        </p>
+                        <div class="flex items-center gap-6">
+                            <div class="h-px w-16 bg-zinc-800"></div>
+                            <span class="text-xs text-zinc-600 uppercase tracking-widest">Andre Sadaune</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -993,13 +968,13 @@
             </div>
         </section>
 
-        <!-- SLIDE 6: Closing / WHY ANDRÉ -->
+        <!-- SLIDE 6: Closing / WHY ANDRE -->
         <section class="slide bg-black border-t border-[#1a1a1a]" id="slide-6">
             <div class="max-w-[1000px] mx-auto w-full relative z-10">
                 <div class="section-number" style="font-size: 20rem; opacity: 0.03;">06</div>
 
                 <div class="closing-container">
-                    <span class="label-tag block mb-8 reveal-up">WHY ANDRÉ</span>
+                    <span class="label-tag block mb-8 reveal-up">WHY ANDRE</span>
 
                     <h2 class="font-serif text-3xl md:text-5xl text-[#fafafa] mb-10 reveal-up stagger-1">
                         I bring the exact operating mix this role needs.
@@ -1017,10 +992,10 @@
                         I can connect SAP's internal machine, Delos/public-sector access, partner channels and AI GTM experience, and turn Sovereign AI into lighthouse deals, repeatable sales plays and partner-led pipeline.
                     </div>
 
-                    <div class="mt-16 flex items-center gap-4 reveal-up stagger-5">
-                        <img src="72 - connygutschalkfotografie_portrait_18.jpg" alt="André Sadaune" class="headshot-img" style="width: 48px; height: 48px;">
+                    <div class="mt-16 flex items-center gap-5 reveal-up stagger-5">
+                        <img src="assets/headshot.jpg?v=3" alt="Andre Sadaune" class="headshot-img" style="width: 80px; height: 80px;">
                         <div>
-                            <span class="text-xs text-zinc-500 uppercase tracking-widest block">André Sadaune</span>
+                            <span class="text-xs text-zinc-500 uppercase tracking-widest block">Andre Sadaune</span>
                             <span class="text-[10px] text-zinc-700 uppercase tracking-wider">Sovereign AI GTM</span>
                         </div>
                     </div>
