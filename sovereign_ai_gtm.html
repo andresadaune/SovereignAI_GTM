@@ -52,6 +52,36 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
+        .sap-bg-image {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(
+                    to right,
+                    rgba(0,0,0,0.92) 0%,
+                    rgba(0,0,0,0.78) 42%,
+                    rgba(0,0,0,0.62) 100%
+                ),
+                linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0.25) 0%,
+                    rgba(0,0,0,0.9) 100%
+                ),
+                url("sap-locations-walldorf-photo-anvilwindow_XL.webp");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.32;
+            filter: grayscale(100%) contrast(1.15) brightness(0.75);
+            z-index: 0;
+        }
+
+        .sap-bg-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 35% 45%, transparent 0%, rgba(0,0,0,0.65) 68%, rgba(0,0,0,0.95) 100%);
+        }
+
         .bg-warm { background-color: #0c0b0a; }
         .bg-cool { background-color: #0d0d0d; }
         .bg-deep { background-color: #080808; }
@@ -494,6 +524,8 @@
     <main>
         <!-- SLIDE 0: Title -->
         <section class="slide bg-black" id="slide-0">
+            <div class="sap-bg-image"></div>
+
             <div class="max-w-[1100px] mx-auto w-full relative z-10">
                 <div class="section-number" style="top: 0; right: 0; font-size: 15rem; opacity: 0.04;">00</div>
 
@@ -509,7 +541,7 @@
                         </defs>
                         <text x="36" y="24" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="17" letter-spacing="1.5">SAP</text>
                     </svg>
-                    <img src="headshot.jpg" alt="André Sadaune" class="headshot-img">
+                    <img src="72 - connygutschalkfotografie_portrait_18.jpeg" alt="André Sadaune" class="headshot-img">
                 </div>
 
                 <div class="min-h-[60vh] flex flex-col justify-center">
@@ -986,7 +1018,7 @@
                     </div>
 
                     <div class="mt-16 flex items-center gap-4 reveal-up stagger-5">
-                        <img src="headshot.jpg" alt="André Sadaune" class="headshot-img" style="width: 48px; height: 48px;">
+                        <img src="72 - connygutschalkfotografie_portrait_18.jpeg" alt="André Sadaune" class="headshot-img" style="width: 48px; height: 48px;">
                         <div>
                             <span class="text-xs text-zinc-500 uppercase tracking-widest block">André Sadaune</span>
                             <span class="text-[10px] text-zinc-700 uppercase tracking-wider">Sovereign AI GTM</span>
